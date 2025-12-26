@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var users = [User]()
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -16,6 +18,11 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .task {
+            if let fetchedUsers = await User.fetchUsers() {
+                users = fetchedUsers
+            }
+        }
     }
 }
 
