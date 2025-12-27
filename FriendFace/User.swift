@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Decodable, Identifiable {
+struct User: Decodable, Hashable, Identifiable {
     let id: UUID
     let isActive: Bool
     let name: String
@@ -19,6 +19,20 @@ struct User: Decodable, Identifiable {
     let registered: Date
     let tags: [String]
     let friends: [Friend]
+    
+    enum CodingKeys: CodingKey {
+        case id
+        case isActive
+        case name
+        case age
+        case company
+        case email
+        case address
+        case about
+        case registered
+        case tags
+        case friends
+    }
     
     static func fetchUsers() async -> [User]? {
         guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
@@ -39,21 +53,9 @@ struct User: Decodable, Identifiable {
             return nil
         }
     }
-    
-    enum CodingKeys: CodingKey {
-        case id
-        case isActive
-        case name
-        case age
-        case company
-        case email
-        case address
-        case about
-        case registered
-        case tags
-        case friends
-    }
-    
+}
+
+extension User {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -70,5 +72,43 @@ struct User: Decodable, Identifiable {
         self.registered = try container.decode(Date.self, forKey: .registered)
         self.tags = try container.decode([String].self, forKey: .tags)
         self.friends = try container.decode([Friend].self, forKey: .friends)
+    }
+    
+    static let sampleUser = User(
+        id: UUID(),
+        isActive: true,
+        name: "Alford Rodriguez",
+        age: 21,
+        company: "Imkan",
+        email: "alfordrodriguez@imkan.com",
+        address: "907 Nelson Street, Cotopaxi, South Dakota, 5913",
+        about: "Occaecat consequat elit aliquip magna laboris dolore laboris sunt officia adipisicing reprehenderit sunt. Do in proident consectetur labore. Laboris pariatur quis incididunt nostrud labore ad cillum veniam ipsum ullamco. Dolore laborum commodo veniam nisi. Eu ullamco cillum ex nostrud fugiat eu consequat enim cupidatat. Non incididunt fugiat cupidatat reprehenderit nostrud eiusmod eu sit minim do amet qui cupidatat. Elit aliquip nisi ea veniam proident dolore exercitation irure est deserunt.",
+        registered: Date.now,
+        tags: [
+            "cillum",
+            "consequat",
+            "deserunt",
+            "nostrud",
+            "eiusmod",
+            "minim",
+            "tempor",
+        ],
+        friends: [
+            Friend(id: UUID(), name: "Hawkins Patel"),
+            Friend(id: UUID(), name: "Jewel Sexton"),
+            Friend(id: UUID(), name: "Berger Robertson"),
+            Friend(id: UUID(), name: "Hess Ford"),
+            Friend(id: UUID(), name: "Bonita White"),
+            Friend(id: UUID(), name: "Sheryl Robinson"),
+            Friend(id: UUID(), name: "Karin Collins"),
+            Friend(id: UUID(), name: "Pace English"),
+            Friend(id: UUID(), name: "Pauline Dawson"),
+            Friend(id: UUID(), name: "Russo Carlson"),
+            Friend(id: UUID(), name: "Josefina Rivas")
+        ]
+    )
+    
+    var birthYear: String {
+        String(Calendar.current.component(.year, from: Date()) - age)
     }
 }
