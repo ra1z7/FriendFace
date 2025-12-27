@@ -49,11 +49,16 @@ struct UserDetailView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 
-                VStack(alignment: .leading) {
-                    Text("About")
-                        .font(.headline)
-                    Text(user.about)
-                        .font(.subheadline)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.secondary.opacity(0.1))
+                    VStack(alignment: .leading) {
+                        Text("About")
+                            .font(.headline)
+                        Text(user.about)
+                            .font(.subheadline)
+                    }
+                    .padding()
                 }
                 .padding()
             }
