@@ -52,11 +52,28 @@ struct UserDetailView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(.secondary.opacity(0.1))
-                    VStack(alignment: .leading) {
-                        Text("About")
-                            .font(.headline)
-                        Text(user.about)
-                            .font(.subheadline)
+                    VStack(alignment: .leading, spacing: 30) {
+                        VStack(alignment: .leading) {
+                            Text("About")
+                                .font(.headline)
+                            Text(user.about)
+                                .font(.subheadline)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Image(systemName: "calendar")
+                                    .foregroundStyle(.secondary)
+                                Text(user.registered, format: .dateTime.year().month())
+                            }
+                            
+                            HStack {
+                                Image(systemName: "map")
+                                    .foregroundStyle(.secondary)
+                                Text(user.address)
+                            }
+                        }
+                        .font(.footnote)
                     }
                     .padding()
                 }
