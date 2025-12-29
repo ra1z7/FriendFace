@@ -49,16 +49,36 @@ struct UserDetailView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(user.tags, id: \.self) { tag in
+                            let randomColor = Color.random
+                            
+                            Text(tag)
+                                .font(.footnote)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(
+                                    Capsule()
+                                        .fill(randomColor.opacity(0.1))
+                                )
+                                .foregroundStyle(randomColor)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                
                 ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.secondary.opacity(0.1))
-                    VStack(alignment: .leading, spacing: 30) {
+                    VStack(alignment: .leading, spacing: 20) {
                         VStack(alignment: .leading) {
                             Text("About")
                                 .font(.headline)
                             Text(user.about)
                                 .font(.subheadline)
                         }
+                        
+                        Divider()
                         
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
@@ -71,11 +91,16 @@ struct UserDetailView: View {
                                 Image(systemName: "map")
                                     .foregroundStyle(.secondary)
                                 Text(user.address)
+                                    .lineLimit(1)
                             }
                         }
                         .font(.footnote)
                     }
                     .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(.secondary.opacity(0.1))
+                    )
                 }
                 .padding()
             }
