@@ -69,40 +69,64 @@ struct UserDetailView: View {
                     .padding(.horizontal)
                 }
                 
-                ZStack {
-                    VStack(alignment: .leading, spacing: 20) {
-                        VStack(alignment: .leading) {
-                            Text("About")
-                                .font(.headline)
-                            Text(user.about)
-                                .font(.subheadline)
-                        }
-                        
-                        Divider()
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Image(systemName: "calendar")
-                                    .foregroundStyle(.secondary)
-                                Text(user.registered, format: .dateTime.year().month())
-                            }
-                            
-                            HStack {
-                                Image(systemName: "map")
-                                    .foregroundStyle(.secondary)
-                                Text(user.address)
-                                    .lineLimit(1)
-                            }
-                        }
-                        .font(.footnote)
+                VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading) {
+                        Text("About")
+                            .font(.headline)
+                        Text(user.about)
+                            .font(.subheadline)
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(.secondary.opacity(0.1))
-                    )
+                    
+                    Divider()
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Image(systemName: "calendar")
+                                .foregroundStyle(.secondary)
+                            Text(user.registered, format: .dateTime.year().month())
+                        }
+                        
+                        HStack {
+                            Image(systemName: "map")
+                                .foregroundStyle(.secondary)
+                            Text(user.address)
+                                .lineLimit(1)
+                        }
+                    }
+                    .font(.footnote)
                 }
                 .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.secondary.opacity(0.1))
+                )
+                .padding()
+                
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Friends")
+                        .font(.headline)
+                    
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 164))], spacing: 14) {
+                        ForEach(user.friends) { friend in
+                            HStack {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .foregroundStyle(Color.random)
+                                    .font(.largeTitle)
+                                Text(friend.name)
+                                    .font(.subheadline)
+                                    .lineLimit(1)
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.secondary.opacity(0.1))
+                )
+                .padding(.horizontal)
             }
         }
     }
