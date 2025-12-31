@@ -131,6 +131,11 @@ struct UserDetailView: View {
                                     Spacer()
                                 }
                                 .frame(maxWidth: .infinity)
+                                .padding(6)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(.gray.opacity(0.2))
+                                )
                             }
                         }
                     }
