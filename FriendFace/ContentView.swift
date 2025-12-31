@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var users = [User]()
+    @State private var allUsers = [User]()
     
     var body: some View {
         NavigationStack {
-            List(users) { user in
+            List(allUsers) { user in
                 NavigationLink(value: user) {
                     HStack(spacing: 14) {
                         Image(systemName: "person.crop.circle.fill")
@@ -39,13 +39,13 @@ struct ContentView: View {
             }
             .navigationTitle("FriendFace")
             .navigationDestination(for: User.self) { selectedUser in
-                UserDetailView(for: selectedUser)
+                UserDetailView(forID: selectedUser.id, from: allUsers)
             }
         }
         .task {
-            if users.isEmpty {
+            if allUsers.isEmpty {
                 if let fetchedUsers = await User.fetchUsers() {
-                    users = fetchedUsers
+                    allUsers = fetchedUsers
                 }
             }
         }

@@ -8,7 +8,18 @@
 import SwiftUI
 
 struct UserDetailView: View {
-    let user: User
+    let userId: UUID
+    let allUsers: [User]
+    
+    var user: User {
+        for user in allUsers {
+            if user.id == userId {
+                return user
+            }
+        }
+        
+        return User.sampleUser
+    }
     
     var body: some View {
         ScrollView {
@@ -108,16 +119,19 @@ struct UserDetailView: View {
                     
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 164))], spacing: 14) {
                         ForEach(user.friends) { friend in
-                            HStack {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .foregroundStyle(Color.random)
-                                    .font(.largeTitle)
-                                Text(friend.name)
-                                    .font(.subheadline)
-                                    .lineLimit(1)
-                                Spacer()
+                            NavigationLink(value: friend) {
+                                HStack {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .foregroundStyle(Color.random)
+                                        .font(.largeTitle)
+                                    Text(friend.name)
+                                        .foregroundStyle(.black)
+                                        .font(.subheadline)
+                                        .lineLimit(1)
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity)
                             }
-                            .frame(maxWidth: .infinity)
                         }
                     }
                 }
@@ -127,15 +141,19 @@ struct UserDetailView: View {
                         .fill(.secondary.opacity(0.1))
                 )
                 .padding(.horizontal)
+                .navigationDestination(for: Friend.self) { selectedFriend in
+                    UserDetailView(forID: selectedFriend.id, from: allUsers)
+                }
             }
         }
     }
     
-    init(for user: User) {
-        self.user = user
+    init(forID userId: UUID, from allUsers: [User]) {
+        self.userId = userId
+        self.allUsers = allUsers
     }
 }
 
 #Preview {
-    UserDetailView(for: User.sampleUser)
+    UserDetailView(forID: User.sampleUser.id, from: [User.sampleUser])
 }
