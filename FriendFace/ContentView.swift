@@ -41,6 +41,9 @@ struct ContentView: View {
             .navigationDestination(for: User.self) { selectedUser in
                 UserDetailView(forID: selectedUser.id, from: allUsers)
             }
+            .navigationDestination(for: Friend.self) { selectedFriend in
+                UserDetailView(forID: selectedFriend.id, from: allUsers)
+            }
         }
         .task {
             if allUsers.isEmpty {

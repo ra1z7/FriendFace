@@ -143,12 +143,9 @@ struct UserDetailView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(.secondary.opacity(0.1))
+                        .stroke(.secondary.opacity(0.1))
                 )
                 .padding(.horizontal)
-                .navigationDestination(for: Friend.self) { selectedFriend in
-                    UserDetailView(forID: selectedFriend.id, from: allUsers)
-                }
             }
         }
     }
