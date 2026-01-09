@@ -5,20 +5,36 @@
 //  Created by Purnaman Rai (College) on 26/12/2025.
 //
 
+import SwiftData
 import Foundation
 
-struct User: Decodable, Hashable, Identifiable {
-    let id: UUID
-    let isActive: Bool
-    let name: String
-    let age: Int
-    let company: String
-    let email: String
-    let address: String
-    let about: String
-    let registered: Date
-    let tags: [String]
-    let friends: [Friend]
+@Model
+final class User: Decodable {
+    var id: UUID
+    var isActive: Bool
+    var name: String
+    var age: Int
+    var company: String
+    var email: String
+    var address: String
+    var about: String
+    var registered: Date
+    var tags: [String]
+    var friends: [Friend]
+    
+    init(id: UUID, isActive: Bool, name: String, age: Int, company: String, email: String, address: String, about: String, registered: Date, tags: [String], friends: [Friend]) {
+        self.id = id
+        self.isActive = isActive
+        self.name = name
+        self.age = age
+        self.company = company
+        self.email = email
+        self.address = address
+        self.about = about
+        self.registered = registered
+        self.tags = tags
+        self.friends = friends
+    }
     
     enum CodingKeys: CodingKey {
         case id
@@ -32,6 +48,24 @@ struct User: Decodable, Hashable, Identifiable {
         case registered
         case tags
         case friends
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let idAsString = try container.decode(String.self, forKey: .id)
+        self.id = UUID(uuidString: idAsString)!
+        
+        self.isActive = try container.decode(Bool.self, forKey: .isActive)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.age = try container.decode(Int.self, forKey: .age)
+        self.company = try container.decode(String.self, forKey: .company)
+        self.email = try container.decode(String.self, forKey: .email)
+        self.address = try container.decode(String.self, forKey: .address)
+        self.about = try container.decode(String.self, forKey: .about)
+        self.registered = try container.decode(Date.self, forKey: .registered)
+        self.tags = try container.decode([String].self, forKey: .tags)
+        self.friends = try container.decode([Friend].self, forKey: .friends)
     }
     
     static func fetchUsers() async -> [User]? {
@@ -56,24 +90,6 @@ struct User: Decodable, Hashable, Identifiable {
 }
 
 extension User {
-    init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        let idAsString = try container.decode(String.self, forKey: .id)
-        self.id = UUID(uuidString: idAsString)!
-        
-        self.isActive = try container.decode(Bool.self, forKey: .isActive)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.age = try container.decode(Int.self, forKey: .age)
-        self.company = try container.decode(String.self, forKey: .company)
-        self.email = try container.decode(String.self, forKey: .email)
-        self.address = try container.decode(String.self, forKey: .address)
-        self.about = try container.decode(String.self, forKey: .about)
-        self.registered = try container.decode(Date.self, forKey: .registered)
-        self.tags = try container.decode([String].self, forKey: .tags)
-        self.friends = try container.decode([Friend].self, forKey: .friends)
-    }
-    
     static let sampleUser = User(
         id: UUID(),
         isActive: true,

@@ -5,10 +5,13 @@
 //  Created by Purnaman Rai (College) on 26/12/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @State private var allUsers = [User]()
+    @Query var allUsers: [User]
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var userIsOffline = false
     
     var body: some View {
@@ -55,7 +58,9 @@ struct ContentView: View {
         .task {
             if allUsers.isEmpty {
                 if let fetchedUsers = await User.fetchUsers() {
-                    allUsers = fetchedUsers
+                    for user in fetchedUsers {
+                        modelContext.insert(user)
+                    }
                 } else {
                     userIsOffline = true
                 }
